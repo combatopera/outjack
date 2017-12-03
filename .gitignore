@@ -1,6 +1,6 @@
 #gclean
 *.pyc
 *.swp
-/native/*.pyxbldc
-/native/*.c
-/native/*.so
+/outjack/*.pyxbldc
+/outjack/*.c
+/outjack/*.so
