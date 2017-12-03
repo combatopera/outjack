@@ -4,3 +4,4 @@ pyversions +=
 years += 2017
 author = Andrzej Cichocki
 name = outjack
+projects += nativecommon
