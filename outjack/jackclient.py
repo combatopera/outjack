@@ -26,19 +26,20 @@ class JackClient:
         self.coupling = coupling
 
     def start(self):
-        self.jack = cjack.Client(self.clientname, self.chancount, self.ringsize, self.coupling)
+        # XXX: Use an explicit character encoding?
+        self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
         self.outputrate = self.jack.get_sample_rate()
         self.buffersize = self.jack.get_buffer_size()
 
     def port_register_output(self, port_name):
-        self.jack.port_register_output(port_name)
+        self.jack.port_register_output(port_name.encode())
 
     def activate(self):
         self.jack.activate()
 
     def connect(self, source_port_name, destination_port_name):
-        self.jack.connect(source_port_name, destination_port_name)
+        self.jack.connect(source_port_name.encode(), destination_port_name.encode())
 
     def current_output_buffer(self):
         return self.jack.current_output_buffer()
