@@ -1,0 +1,6 @@
+pyversions +=
+    2
+    3
+years += 2017
+author = Andrzej Cichocki
+name = outjack
