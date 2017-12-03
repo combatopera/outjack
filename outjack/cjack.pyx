@@ -55,7 +55,7 @@ cdef extern from "jack/jack.h":
     ctypedef struct jack_port_t:
         pass # Opaque.
 
-    DEF JACK_DEFAULT_AUDIO_TYPE = '32 bit float mono audio'
+    DEF JACK_DEFAULT_AUDIO_TYPE = b'32 bit float mono audio'
 
     cdef enum JackPortFlags: # XXX: How is this different from ctypedef?
         JackPortIsOutput = 0x2
