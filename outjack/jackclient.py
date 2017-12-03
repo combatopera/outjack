@@ -16,16 +16,19 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import cjack
+import subprocess
 
 class JackClient:
 
-    def __init__(self, clientname, chancount, ringsize, coupling):
+    def __init__(self, clientname, chancount, ringsize, coupling, servercommand = ['jackd', '-d', 'alsa']):
         self.clientname = clientname
         self.chancount = chancount
         self.ringsize = ringsize
         self.coupling = coupling
+        self.servercommand = servercommand
 
     def start(self):
+        self.server = subprocess.Popen(self.servercommand)
         # XXX: Use an explicit character encoding?
         self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
@@ -52,3 +55,5 @@ class JackClient:
 
     def stop(self):
         self.jack.dispose()
+        self.server.terminate()
+        self.server.wait()
