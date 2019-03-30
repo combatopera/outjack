@@ -16,7 +16,7 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import cjack
-import subprocess
+import subprocess, sys
 
 class JackClient:
 
@@ -28,7 +28,7 @@ class JackClient:
         self.servercommand = servercommand
 
     def start(self):
-        self.server = subprocess.Popen(self.servercommand)
+        self.server = subprocess.Popen(self.servercommand, stdout = sys.stderr.fileno())
         # XXX: Use an explicit character encoding?
         self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
