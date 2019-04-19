@@ -142,8 +142,8 @@ cdef int callback(jack_nframes_t nframes, void* arg):
     payload.callback(nframes)
     return 0 # Success.
 
-cdef jack_default_audio_sample_t* getaddress(np.ndarray[np.float32_t, ndim=2] samples):
-    return &samples[0, 0]
+cdef jack_default_audio_sample_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
+    return &samples[0]
 
 cdef class Client:
 
@@ -162,7 +162,7 @@ cdef class Client:
             time.sleep(1)
             PyErr_CheckSignals()
         self.buffersize = jack_get_buffer_size(self.client)
-        self.outbufs = [pynp.empty((chancount, self.buffersize), dtype = pynp.float32) for _ in xrange(ringsize)]
+        self.outbufs = [pynp.empty(chancount * self.buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(self.buffersize, ringsize, coupling)
         self.writecursorproxy = self.payload.writecursor
         # Note the pointer stays valid until Client is garbage-collected:
