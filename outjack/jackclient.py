@@ -16,11 +16,12 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import cjack
+from pathlib import Path
 import subprocess, sys
 
 class JackClient:
 
-    def __init__(self, clientname, chancount, ringsize, coupling, servercommand = ['jackd', '-d', 'alsa']):
+    def __init__(self, clientname, chancount, ringsize, coupling, servercommand = ['jackd', '-d', 'alsa' if Path('/proc/asound').exists() else 'coreaudio']):
         self.clientname = clientname
         self.chancount = chancount
         self.ringsize = ringsize
