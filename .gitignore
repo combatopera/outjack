@@ -3,3 +3,8 @@
 /outjack/*.pyxbldc
 /outjack/*.c
 /outjack/*.so
+/build/
+/dist/
+/outjack.egg-info/
+/setup.cfg
+/setup.py
