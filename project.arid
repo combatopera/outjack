@@ -22,6 +22,5 @@ years += 2017
 author = Andrzej Cichocki
 name = outjack
 requires +=
-    Cython
     nativecommon
     numpy
