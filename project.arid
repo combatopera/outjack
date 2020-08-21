@@ -25,3 +25,4 @@ requires +=
     nativecommon
     numpy
 build requires += numpy
+devel packages += jack-audio-connection-kit-devel
