@@ -57,7 +57,7 @@ cdef extern from "jack/jack.h":
 
     DEF JACK_DEFAULT_AUDIO_TYPE = b'32 bit float mono audio'
 
-    cdef enum JackPortFlags: # XXX: How is this different from ctypedef?
+    cdef enum JackPortFlags:
         JackPortIsOutput = 0x2
 
     ctypedef int (*JackProcessCallback)(jack_nframes_t, void*)
