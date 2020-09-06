@@ -23,6 +23,6 @@ author = Andrzej Cichocki
 name = outjack
 requires +=
     nativecommon>=4
-    numpy>=1.19.1
+    numpy>=1.16.6
 build requires += numpy
 devel packages += jack-audio-connection-kit-devel
