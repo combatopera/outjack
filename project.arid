@@ -22,7 +22,7 @@ years += 2017
 author = Andrzej Cichocki
 name = outjack
 requires +=
-    nativecommon
-    numpy
+    nativecommon>=4
+    numpy>=1.19.1
 build requires += numpy
 devel packages += jack-audio-connection-kit-devel
