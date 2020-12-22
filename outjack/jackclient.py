@@ -19,6 +19,8 @@ from . import cjack
 from lagoon import jack_control
 import sys
 
+jackctl = jack_control.partial(stdout = sys.stderr)
+
 class JackClient:
 
     def __init__(self, clientname, chancount, ringsize, coupling):
@@ -28,9 +30,9 @@ class JackClient:
         self.coupling = coupling
 
     def start(self):
-        self.startjack = jack_control.status(check = False, stdout = sys.stderr)
+        self.startjack = jackctl.status(check = False)
         if self.startjack:
-            jack_control.start.print()
+            jackctl.start()
         # XXX: Use an explicit character encoding?
         self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
@@ -58,4 +60,4 @@ class JackClient:
     def stop(self):
         self.jack.dispose()
         if self.startjack:
-            jack_control.stop.print()
+            jackctl.stop()
