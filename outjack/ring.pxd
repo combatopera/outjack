@@ -17,7 +17,7 @@
 
 # cython: language_level=3
 
-from .jack cimport *
+from .jack cimport jack_client_t, jack_default_audio_sample_t, jack_nframes_t
 from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from libc.stdlib cimport malloc
