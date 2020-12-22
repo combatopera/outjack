@@ -49,6 +49,8 @@ cdef extern from "portaudio.h":
     PaError Pa_Initialize()
     PaError Pa_Terminate()
     PaError Pa_OpenDefaultStream(PaStream**, int, int, PaSampleFormat, double, unsigned long, PaStreamCallback*, void*)
+    PaError Pa_StartStream(PaStream*)
+    PaError Pa_StopStream(PaStream*)
     PaError Pa_CloseStream(PaStream*)
 
 cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
@@ -80,6 +82,7 @@ cdef class Client:
 
     def activate(self):
         Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.outputrate, self.buffersize, &callback, <PyObject*> self.payload)
+        Pa_StartStream(self.stream)
 
     def current_output_buffer(self):
         return self.outbufs[self.writecursorproxy]
@@ -90,6 +93,7 @@ cdef class Client:
         return self.current_output_buffer()
 
     def deactivate(self):
+        Pa_StopStream(self.stream)
         Pa_CloseStream(self.stream)
 
     def dispose(self):
