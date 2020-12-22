@@ -19,6 +19,7 @@
 
 from .jack cimport *
 from .ring cimport Payload
+from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from cpython.exc cimport PyErr_CheckSignals
 from cpython.ref cimport PyObject
@@ -63,7 +64,8 @@ cdef class Client:
         return self.buffersize
 
     def port_register_output(self, const char* port_name):
-        self.payload.addport(self.client, port_name)
+        # Last arg ignored for JACK_DEFAULT_AUDIO_TYPE:
+        self.payload.ports.append(<uintptr_t> jack_port_register(self.client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0))
 
     def activate(self):
         return jack_activate(self.client)

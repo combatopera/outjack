@@ -39,10 +39,6 @@ cdef class Payload:
         self.buffersize = buffersize
         self.coupling = coupling
 
-    cdef addport(self, jack_client_t* client, port_name):
-        # Last arg ignored for JACK_DEFAULT_AUDIO_TYPE:
-        self.ports.append(<uintptr_t> jack_port_register(client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0))
-
     cdef unsigned send(self, jack_default_audio_sample_t* samples):
         pthread_mutex_lock(&(self.mutex))
         self.chunks[self.writecursor] = samples # It was NULL.

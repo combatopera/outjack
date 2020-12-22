@@ -17,11 +17,7 @@
 
 # cython: language_level=3
 
-from .jack cimport jack_client_t, jack_default_audio_sample_t, jack_nframes_t
-from libc.stdint cimport uintptr_t
-from libc.stdio cimport fprintf, stderr
-from libc.stdlib cimport malloc
-from libc.string cimport memcpy
+from .jack cimport jack_default_audio_sample_t, jack_nframes_t
 
 cdef extern from "pthread.h":
 
@@ -50,8 +46,6 @@ cdef class Payload:
     cdef size_t bufferbytes
     cdef size_t buffersize
     cdef bint coupling
-
-    cdef addport(self, jack_client_t* client, port_name)
 
     cdef unsigned send(self, jack_default_audio_sample_t* samples)
 
