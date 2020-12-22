@@ -18,91 +18,12 @@
 # cython: language_level=3
 
 from .jack cimport *
-from libc.stdint cimport uintptr_t
+from .ring cimport Payload
 from libc.stdio cimport fprintf, stderr
-from libc.stdlib cimport malloc
-from libc.string cimport memcpy
 from cpython.exc cimport PyErr_CheckSignals
 from cpython.ref cimport PyObject
 cimport numpy as np
 import numpy as pynp, time
-
-cdef extern from "pthread.h":
-
-    ctypedef struct pthread_mutex_t:
-        pass
-
-    ctypedef struct pthread_cond_t:
-        pass
-
-    int pthread_mutex_init(pthread_mutex_t*, void*)
-    int pthread_mutex_lock(pthread_mutex_t*)
-    int pthread_mutex_unlock(pthread_mutex_t*)
-    int pthread_cond_init(pthread_cond_t*, void*)
-    int pthread_cond_signal(pthread_cond_t*)
-    int pthread_cond_wait(pthread_cond_t*, pthread_mutex_t*) nogil
-
-cdef class Payload:
-
-    cdef object ports
-    cdef pthread_mutex_t mutex
-    cdef pthread_cond_t cond
-    cdef unsigned ringsize
-    cdef jack_default_audio_sample_t** chunks
-    cdef unsigned writecursor # Always points to a free chunk.
-    cdef unsigned readcursor
-    cdef size_t bufferbytes
-    cdef size_t buffersize
-    cdef bint coupling
-
-    def __init__(self, buffersize, ringsize, coupling):
-        self.ports = []
-        pthread_mutex_init(&(self.mutex), NULL)
-        pthread_cond_init(&(self.cond), NULL)
-        self.ringsize = ringsize
-        self.chunks = <jack_default_audio_sample_t**> malloc(self.ringsize * sizeof (jack_default_audio_sample_t*))
-        for i in xrange(self.ringsize):
-            self.chunks[i] = NULL
-        self.writecursor = 0
-        self.readcursor = 0
-        self.bufferbytes = buffersize * sizeof (jack_default_audio_sample_t)
-        self.buffersize = buffersize
-        self.coupling = coupling
-
-    cdef addport(self, jack_client_t* client, port_name):
-        # Last arg ignored for JACK_DEFAULT_AUDIO_TYPE:
-        self.ports.append(<uintptr_t> jack_port_register(client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0))
-
-    cdef unsigned send(self, jack_default_audio_sample_t* samples):
-        pthread_mutex_lock(&(self.mutex))
-        self.chunks[self.writecursor] = samples # It was NULL.
-        self.writecursor = (self.writecursor + 1) % self.ringsize
-        # Allow callback to see the data before releasing slot to the producer:
-        if self.chunks[self.writecursor] != NULL:
-            if not self.coupling:
-                fprintf(stderr, "%s\n", <char*> 'Overrun!') # The producer is too fast.
-            # There is only one consumer, but we use while to catch spurious wakeups:
-            while self.chunks[self.writecursor] != NULL:
-                with nogil:
-                    pthread_cond_wait(&(self.cond), &(self.mutex))
-        pthread_mutex_unlock(&(self.mutex))
-        return self.writecursor
-
-    cdef callback(self, jack_nframes_t nframes):
-        # This is a Python-free zone!
-        pthread_mutex_lock(&(self.mutex)) # Worst case is a tiny delay while we wait for send to finish.
-        cdef jack_default_audio_sample_t* samples = self.chunks[self.readcursor]
-        if samples != NULL:
-            for port in self.ports:
-                memcpy(jack_port_get_buffer(<jack_port_t*> <uintptr_t> port, nframes), samples, self.bufferbytes)
-                samples = &samples[self.buffersize]
-            self.chunks[self.readcursor] = NULL
-            self.readcursor = (self.readcursor + 1) % self.ringsize
-            pthread_cond_signal(&(self.cond))
-        else:
-            # Unknown when send will run, so give up:
-            fprintf(stderr, "%s\n", <char*> 'Underrun!')
-        pthread_mutex_unlock(&(self.mutex))
 
 cdef int callback(jack_nframes_t nframes, void* arg):
     cdef Payload payload = <Payload> arg
