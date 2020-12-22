@@ -53,13 +53,13 @@ cdef class Payload:
         pthread_mutex_unlock(&(self.mutex))
         return self.writecursor
 
-    cdef callback(self, ring_nframes_t nframes):
+    cdef callback(self, ring_nframes_t nframes, void* callbackinfo):
         # This is a Python-free zone!
         pthread_mutex_lock(&(self.mutex)) # Worst case is a tiny delay while we wait for send to finish.
         cdef ring_sample_t* samples = self.chunks[self.readcursor]
         if samples != NULL:
             for port in self.ports:
-                memcpy(self.get_buffer(<uintptr_t> port, nframes), samples, self.bufferbytes)
+                memcpy(self.get_buffer(<uintptr_t> port, nframes, callbackinfo), samples, self.bufferbytes)
                 samples = &samples[self.buffersize]
             self.chunks[self.readcursor] = NULL
             self.readcursor = (self.readcursor + 1) % self.ringsize

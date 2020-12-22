@@ -28,13 +28,13 @@ import numpy as pynp, time
 
 cdef int callback(jack_nframes_t nframes, void* arg):
     cdef Payload payload = <Payload> arg
-    payload.callback(nframes)
+    payload.callback(nframes, NULL)
     return 0 # Success.
 
 cdef jack_default_audio_sample_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
     return &samples[0]
 
-cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes):
+cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo):
     return jack_port_get_buffer(<jack_port_t*> port, nframes)
 
 cdef class Client:

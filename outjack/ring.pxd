@@ -51,8 +51,8 @@ cdef class Payload:
     cdef size_t bufferbytes
     cdef size_t buffersize
     cdef bint coupling
-    cdef void* (*get_buffer)(uintptr_t, ring_nframes_t)
+    cdef void* (*get_buffer)(uintptr_t, ring_nframes_t, void*)
 
     cdef unsigned send(self, ring_sample_t* samples)
 
-    cdef callback(self, ring_nframes_t nframes)
+    cdef callback(self, ring_nframes_t nframes, void* callbackinfo)
