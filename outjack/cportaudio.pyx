@@ -17,7 +17,7 @@
 
 # cython: language_level=3
 
-from .ring import Payload
+from .ring cimport Payload
 from cpython.ref cimport PyObject
 
 cdef extern from "portaudio.h":
