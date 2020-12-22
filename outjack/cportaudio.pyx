@@ -17,20 +17,61 @@
 
 # cython: language_level=3
 
+from cpython.ref cimport PyObject
+
 cdef extern from "portaudio.h":
+
+    DEF paFloat32 = 0x00000001
+
+    cdef enum PaStreamCallbackResult:
+        paContinue = 0
+
+    ctypedef double PaTime
+
+    ctypedef struct PaStreamCallbackTimeInfo:
+        PaTime inputBufferAdcTime
+        PaTime currentTime
+        PaTime outputBufferDacTime
 
     ctypedef int PaError
 
+    ctypedef void PaStream
+
+    ctypedef unsigned long PaSampleFormat
+
+    ctypedef unsigned long PaStreamCallbackFlags
+
+    ctypedef int PaStreamCallback(const void*, void*, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void*)
+
     PaError Pa_Initialize()
     PaError Pa_Terminate()
+    PaError Pa_OpenDefaultStream(PaStream**, int, int, PaSampleFormat, double, unsigned long, PaStreamCallback*, void*)
+    PaError Pa_CloseStream(PaStream*)
+
+cdef class Payload: pass
+
+cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
+    cdef Payload payload = <Payload> userData
+    payload.callback(frameCount)
+    return paContinue
 
 cdef class Client:
 
-    def __init__(self):
+    cdef PaStream* stream
+    cdef Payload payload
+    cdef int chancount
+    cdef double samplerate
+    cdef unsigned long buffersize
+
+    def __init__(self, chancount, samplerate, buffersize):
         Pa_Initialize()
+        self.payload = Payload()
+        self.chancount = chancount
+        self.samplerate = samplerate
+        self.buffersize = buffersize
 
     def activate(self):
-        raise Exception('Implement me!')
+        Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.samplerate, self.buffersize, &callback, <PyObject*> self.payload)
 
     def current_output_buffer(self):
         raise Exception('Implement me!')
@@ -39,7 +80,7 @@ cdef class Client:
         raise Exception('Implement me!')
 
     def deactivate(self):
-        raise Exception('Implement me!')
+        Pa_CloseStream(self.stream)
 
     def dispose(self):
         Pa_Terminate()
