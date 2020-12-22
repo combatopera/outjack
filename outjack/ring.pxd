@@ -17,8 +17,8 @@
 
 # cython: language_level=3
 
-from .jack cimport jack_default_audio_sample_t, jack_nframes_t
 from libc.stdint cimport uintptr_t
+cimport numpy as np
 
 cdef extern from "pthread.h":
 
@@ -35,20 +35,24 @@ cdef extern from "pthread.h":
     int pthread_cond_signal(pthread_cond_t*)
     int pthread_cond_wait(pthread_cond_t*, pthread_mutex_t*) nogil
 
+ctypedef np.float32_t ring_sample_t
+
+ctypedef np.uint32_t ring_nframes_t
+
 cdef class Payload:
 
     cdef object ports
     cdef pthread_mutex_t mutex
     cdef pthread_cond_t cond
     cdef unsigned ringsize
-    cdef jack_default_audio_sample_t** chunks
+    cdef ring_sample_t** chunks
     cdef unsigned writecursor # Always points to a free chunk.
     cdef unsigned readcursor
     cdef size_t bufferbytes
     cdef size_t buffersize
     cdef bint coupling
-    cdef void* (*get_buffer)(uintptr_t, jack_nframes_t)
+    cdef void* (*get_buffer)(uintptr_t, ring_nframes_t)
 
-    cdef unsigned send(self, jack_default_audio_sample_t* samples)
+    cdef unsigned send(self, ring_sample_t* samples)
 
-    cdef callback(self, jack_nframes_t nframes)
+    cdef callback(self, ring_nframes_t nframes)

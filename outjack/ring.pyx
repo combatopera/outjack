@@ -17,7 +17,6 @@
 
 # cython: language_level=3
 
-from .jack cimport *
 from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from libc.stdlib cimport malloc
@@ -30,16 +29,16 @@ cdef class Payload:
         pthread_mutex_init(&(self.mutex), NULL)
         pthread_cond_init(&(self.cond), NULL)
         self.ringsize = ringsize
-        self.chunks = <jack_default_audio_sample_t**> malloc(self.ringsize * sizeof (jack_default_audio_sample_t*))
+        self.chunks = <ring_sample_t**> malloc(self.ringsize * sizeof (ring_sample_t*))
         for i in xrange(self.ringsize):
             self.chunks[i] = NULL
         self.writecursor = 0
         self.readcursor = 0
-        self.bufferbytes = buffersize * sizeof (jack_default_audio_sample_t)
+        self.bufferbytes = buffersize * sizeof (ring_sample_t)
         self.buffersize = buffersize
         self.coupling = coupling
 
-    cdef unsigned send(self, jack_default_audio_sample_t* samples):
+    cdef unsigned send(self, ring_sample_t* samples):
         pthread_mutex_lock(&(self.mutex))
         self.chunks[self.writecursor] = samples # It was NULL.
         self.writecursor = (self.writecursor + 1) % self.ringsize
@@ -54,10 +53,10 @@ cdef class Payload:
         pthread_mutex_unlock(&(self.mutex))
         return self.writecursor
 
-    cdef callback(self, jack_nframes_t nframes):
+    cdef callback(self, ring_nframes_t nframes):
         # This is a Python-free zone!
         pthread_mutex_lock(&(self.mutex)) # Worst case is a tiny delay while we wait for send to finish.
-        cdef jack_default_audio_sample_t* samples = self.chunks[self.readcursor]
+        cdef ring_sample_t* samples = self.chunks[self.readcursor]
         if samples != NULL:
             for port in self.ports:
                 memcpy(self.get_buffer(<uintptr_t> port, nframes), samples, self.bufferbytes)
