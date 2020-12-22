@@ -17,6 +17,7 @@
 
 # cython: language_level=3
 
+from .ring import Payload
 from cpython.ref cimport PyObject
 
 cdef extern from "portaudio.h":
@@ -47,8 +48,6 @@ cdef extern from "portaudio.h":
     PaError Pa_Terminate()
     PaError Pa_OpenDefaultStream(PaStream**, int, int, PaSampleFormat, double, unsigned long, PaStreamCallback*, void*)
     PaError Pa_CloseStream(PaStream*)
-
-cdef class Payload: pass
 
 cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
     cdef Payload payload = <Payload> userData
