@@ -18,6 +18,7 @@
 # cython: language_level=3
 
 from .jack cimport jack_default_audio_sample_t, jack_nframes_t
+from libc.stdint cimport uintptr_t
 
 cdef extern from "pthread.h":
 
@@ -46,6 +47,7 @@ cdef class Payload:
     cdef size_t bufferbytes
     cdef size_t buffersize
     cdef bint coupling
+    cdef void* (*get_buffer)(uintptr_t, jack_nframes_t)
 
     cdef unsigned send(self, jack_default_audio_sample_t* samples)
 

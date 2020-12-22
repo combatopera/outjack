@@ -60,7 +60,7 @@ cdef class Payload:
         cdef jack_default_audio_sample_t* samples = self.chunks[self.readcursor]
         if samples != NULL:
             for port in self.ports:
-                memcpy(jack_port_get_buffer(<jack_port_t*> <uintptr_t> port, nframes), samples, self.bufferbytes)
+                memcpy(self.get_buffer(<uintptr_t> port, nframes), samples, self.bufferbytes)
                 samples = &samples[self.buffersize]
             self.chunks[self.readcursor] = NULL
             self.readcursor = (self.readcursor + 1) % self.ringsize
