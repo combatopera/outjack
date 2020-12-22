@@ -25,11 +25,17 @@ class PortAudioClient:
     def start(self):
         self.portaudio = cportaudio.Client()
 
+    def activate(self):
+        self.portaudio.activate()
+
     def current_output_buffer(self):
         return self.portaudio.current_output_buffer()
 
     def send_and_get_output_buffer(self):
         return self.portaudio.send_and_get_output_buffer()
+
+    def deactivate(self):
+        self.portaudio.deactivate()
 
     def stop(self):
         self.portaudio.dispose()
