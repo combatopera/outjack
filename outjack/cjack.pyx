@@ -17,14 +17,15 @@
 
 # cython: language_level=3
 
-cimport numpy as np
-import numpy as pynp, time
+from .jack cimport *
+from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from libc.stdlib cimport malloc
 from libc.string cimport memcpy
-from libc.stdint cimport uintptr_t
-from cpython.ref cimport PyObject
 from cpython.exc cimport PyErr_CheckSignals
+from cpython.ref cimport PyObject
+cimport numpy as np
+import numpy as pynp, time
 
 cdef extern from "pthread.h":
 
@@ -40,42 +41,6 @@ cdef extern from "pthread.h":
     int pthread_cond_init(pthread_cond_t*, void*)
     int pthread_cond_signal(pthread_cond_t*)
     int pthread_cond_wait(pthread_cond_t*, pthread_mutex_t*) nogil
-
-cdef extern from "jack/jack.h":
-
-    ctypedef struct jack_client_t:
-        pass # Opaque.
-
-    ctypedef enum jack_options_t:
-        JackNoStartServer = 0x01
-
-    ctypedef enum jack_status_t:
-        pass
-
-    ctypedef np.uint32_t jack_nframes_t
-
-    ctypedef struct jack_port_t:
-        pass # Opaque.
-
-    DEF JACK_DEFAULT_AUDIO_TYPE = b'32 bit float mono audio'
-
-    cdef enum JackPortFlags:
-        JackPortIsOutput = 0x2
-
-    ctypedef int (*JackProcessCallback)(jack_nframes_t, void*)
-
-    ctypedef np.float32_t jack_default_audio_sample_t
-
-    jack_client_t* jack_client_open(const char*, jack_options_t, jack_status_t*, ...)
-    jack_nframes_t jack_get_sample_rate(jack_client_t*)
-    jack_port_t* jack_port_register(jack_client_t*, const char*, const char*, unsigned long, unsigned long)
-    jack_nframes_t jack_get_buffer_size(jack_client_t*)
-    int jack_activate(jack_client_t*)
-    int jack_connect(jack_client_t*, const char*, const char*)
-    int jack_deactivate(jack_client_t*)
-    int jack_client_close(jack_client_t*)
-    int jack_set_process_callback(jack_client_t*, JackProcessCallback, void*)
-    void* jack_port_get_buffer(jack_port_t*, jack_nframes_t)
 
 cdef class Payload:
 
