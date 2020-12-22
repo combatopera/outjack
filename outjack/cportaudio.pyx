@@ -17,8 +17,9 @@
 
 # cython: language_level=3
 
-from .ring cimport Payload
+from .ring cimport Payload, ring_nframes_t
 from cpython.ref cimport PyObject
+from libc.stdint cimport uintptr_t
 cimport numpy as np
 import numpy as pynp
 
@@ -55,11 +56,14 @@ cdef extern from "portaudio.h":
 
 cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
     cdef Payload payload = <Payload> userData
-    payload.callback(frameCount)
+    payload.callback(frameCount, output)
     return paContinue
 
 cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
     return &samples[0]
+
+cdef void* _get_buffer(uintptr_t port, ring_nframes_t nframes, void* callbackinfo):
+    return callbackinfo
 
 cdef class Client:
 
@@ -75,6 +79,7 @@ cdef class Client:
         Pa_Initialize()
         self.outbufs = [pynp.empty(chancount * buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(buffersize, ringsize, coupling)
+        self.payload.get_buffer = &_get_buffer
         self.writecursorproxy = self.payload.writecursor
         self.chancount = chancount
         self.outputrate = outputrate
