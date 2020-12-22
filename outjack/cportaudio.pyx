@@ -29,10 +29,16 @@ cdef class Client:
     def __init__(self):
         Pa_Initialize()
 
+    def activate(self):
+        raise Exception('Implement me!')
+
     def current_output_buffer(self):
         raise Exception('Implement me!')
 
     def send_and_get_output_buffer(self):
+        raise Exception('Implement me!')
+
+    def deactivate(self):
         raise Exception('Implement me!')
 
     def dispose(self):
