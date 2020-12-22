@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
+# cython: language_level=3
+
 cdef extern from "portaudio.h":
 
     ctypedef int PaError
