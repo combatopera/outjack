@@ -1,4 +1,4 @@
-: Copyright 2017 Andrzej Cichocki
+: Copyright 2017, 2020 Andrzej Cichocki
 
 : This file is part of outjack.
 :
@@ -16,7 +16,9 @@
 : along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 pyversions += 3
-years += 2017
+years +=
+    2017
+    2020
 author = Andrzej Cichocki
 name = outjack
 requires +=
