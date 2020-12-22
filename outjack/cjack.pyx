@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
+# cython: language_level=3
+
 cimport numpy as np
 import numpy as pynp, time
 from libc.stdio cimport fprintf, stderr
