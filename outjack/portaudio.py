@@ -25,11 +25,11 @@ class PortAudioClient:
     def start(self):
         self.client = cportaudio.Client()
 
-    def initial(self):
-        return self.client.initial()
+    def current_output_buffer(self):
+        return self.client.current_output_buffer()
 
-    def flip(self):
-        return self.client.flip()
+    def send_and_get_output_buffer(self):
+        return self.client.send_and_get_output_buffer()
 
     def stop(self):
         self.client.dispose()
