@@ -59,18 +59,18 @@ cdef class Client:
     cdef PaStream* stream
     cdef Payload payload
     cdef int chancount
-    cdef double samplerate
+    cdef double outputrate
     cdef unsigned long buffersize
 
-    def __init__(self, chancount, samplerate, buffersize):
+    def __init__(self, chancount, outputrate, buffersize):
         Pa_Initialize()
         self.payload = Payload()
         self.chancount = chancount
-        self.samplerate = samplerate
+        self.outputrate = outputrate
         self.buffersize = buffersize
 
     def activate(self):
-        Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.samplerate, self.buffersize, &callback, <PyObject*> self.payload)
+        Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.outputrate, self.buffersize, &callback, <PyObject*> self.payload)
 
     def current_output_buffer(self):
         raise Exception('Implement me!')
