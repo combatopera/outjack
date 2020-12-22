@@ -19,6 +19,7 @@
 
 from .ring cimport Payload
 from cpython.ref cimport PyObject
+import numpy as pynp
 
 cdef extern from "portaudio.h":
 
@@ -57,14 +58,18 @@ cdef int callback(const void* input, void* output, unsigned long frameCount, con
 cdef class Client:
 
     cdef PaStream* stream
+    cdef object outbufs
     cdef Payload payload
+    cdef unsigned writecursorproxy
     cdef int chancount
     cdef double outputrate
     cdef unsigned long buffersize
 
     def __init__(self, chancount, outputrate, buffersize, ringsize, coupling):
         Pa_Initialize()
+        self.outbufs = [pynp.empty(chancount * buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(buffersize, ringsize, coupling)
+        self.writecursorproxy = self.payload.writecursor
         self.chancount = chancount
         self.outputrate = outputrate
         self.buffersize = buffersize
@@ -73,7 +78,7 @@ cdef class Client:
         Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.outputrate, self.buffersize, &callback, <PyObject*> self.payload)
 
     def current_output_buffer(self):
-        raise Exception('Implement me!')
+        return self.outbufs[self.writecursorproxy]
 
     def send_and_get_output_buffer(self):
         raise Exception('Implement me!')
