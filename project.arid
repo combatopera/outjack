@@ -15,9 +15,7 @@
 : You should have received a copy of the GNU General Public License
 : along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
-pyversions +=
-    2
-    3
+pyversions += 3
 years += 2017
 author = Andrzej Cichocki
 name = outjack
