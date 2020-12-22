@@ -16,20 +16,21 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import cjack
-from pathlib import Path
-import subprocess, sys
+from lagoon import jack_control
+import sys
 
 class JackClient:
 
-    def __init__(self, clientname, chancount, ringsize, coupling, servercommand = ['jackd', '-d', 'alsa' if Path('/proc/asound').exists() else 'coreaudio']):
+    def __init__(self, clientname, chancount, ringsize, coupling):
         self.clientname = clientname
         self.chancount = chancount
         self.ringsize = ringsize
         self.coupling = coupling
-        self.servercommand = servercommand
 
     def start(self):
-        self.server = subprocess.Popen(self.servercommand, stdout = sys.stderr.fileno())
+        self.startjack = jack_control.status(check = False, stdout = sys.stderr)
+        if self.startjack:
+            jack_control.start.print()
         # XXX: Use an explicit character encoding?
         self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
@@ -56,5 +57,5 @@ class JackClient:
 
     def stop(self):
         self.jack.dispose()
-        self.server.terminate()
-        self.server.wait()
+        if self.startjack:
+            jack_control.stop.print()
