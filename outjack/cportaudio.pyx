@@ -19,6 +19,7 @@
 
 from .ring cimport Payload
 from cpython.ref cimport PyObject
+cimport numpy as np
 import numpy as pynp
 
 cdef extern from "portaudio.h":
@@ -55,6 +56,9 @@ cdef int callback(const void* input, void* output, unsigned long frameCount, con
     payload.callback(frameCount)
     return paContinue
 
+cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
+    return &samples[0]
+
 cdef class Client:
 
     cdef PaStream* stream
@@ -81,7 +85,9 @@ cdef class Client:
         return self.outbufs[self.writecursorproxy]
 
     def send_and_get_output_buffer(self):
-        raise Exception('Implement me!')
+        cdef np.float32_t* samples = getaddress(self.current_output_buffer())
+        self.writecursorproxy = self.payload.send(samples) # May block until there is a free buffer.
+        return self.current_output_buffer()
 
     def deactivate(self):
         Pa_CloseStream(self.stream)
