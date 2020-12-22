@@ -62,9 +62,9 @@ cdef class Client:
     cdef double outputrate
     cdef unsigned long buffersize
 
-    def __init__(self, chancount, outputrate, buffersize):
+    def __init__(self, chancount, outputrate, buffersize, ringsize, coupling):
         Pa_Initialize()
-        self.payload = Payload()
+        self.payload = Payload(buffersize, ringsize, coupling)
         self.chancount = chancount
         self.outputrate = outputrate
         self.buffersize = buffersize

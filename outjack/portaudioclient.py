@@ -19,13 +19,15 @@ from . import cportaudio
 
 class PortAudioClient:
 
-    def __init__(self, chancount, outputrate, buffersize):
+    def __init__(self, chancount, outputrate, buffersize, ringsize, coupling):
         self.chancount = chancount
         self.outputrate = outputrate
         self.buffersize = buffersize
+        self.ringsize = ringsize
+        self.coupling = coupling
 
     def start(self):
-        self.portaudio = cportaudio.Client(self.chancount, self.outputrate, self.buffersize)
+        self.portaudio = cportaudio.Client(self.chancount, self.outputrate, self.buffersize, self.ringsize, self.coupling)
 
     def activate(self):
         self.portaudio.activate()
