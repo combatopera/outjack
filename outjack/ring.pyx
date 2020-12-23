@@ -21,6 +21,10 @@ from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from libc.stdlib cimport malloc
 from libc.string cimport memcpy
+cimport numpy as np
+
+cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
+    return &samples[0]
 
 cdef class Payload:
 
