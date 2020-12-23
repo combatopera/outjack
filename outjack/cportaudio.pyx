@@ -17,42 +17,12 @@
 
 # cython: language_level=3
 
+from .portaudio cimport *
 from .ring cimport Payload, ring_nframes_t
 from cpython.ref cimport PyObject
 from libc.stdint cimport uintptr_t
 cimport numpy as np
 import numpy as pynp
-
-cdef extern from "portaudio.h":
-
-    DEF paFloat32 = 0x00000001
-
-    cdef enum PaStreamCallbackResult:
-        paContinue = 0
-
-    ctypedef double PaTime
-
-    ctypedef struct PaStreamCallbackTimeInfo:
-        PaTime inputBufferAdcTime
-        PaTime currentTime
-        PaTime outputBufferDacTime
-
-    ctypedef int PaError
-
-    ctypedef void PaStream
-
-    ctypedef unsigned long PaSampleFormat
-
-    ctypedef unsigned long PaStreamCallbackFlags
-
-    ctypedef int PaStreamCallback(const void*, void*, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void*)
-
-    PaError Pa_Initialize()
-    PaError Pa_Terminate()
-    PaError Pa_OpenDefaultStream(PaStream**, int, int, PaSampleFormat, double, unsigned long, PaStreamCallback*, void*)
-    PaError Pa_StartStream(PaStream*)
-    PaError Pa_StopStream(PaStream*)
-    PaError Pa_CloseStream(PaStream*)
 
 cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
     cdef Payload payload = <Payload> userData
