@@ -19,8 +19,6 @@
 
 cdef extern from "portaudio.h":
 
-    DEF paFloat32 = 0x00000001
-
     cdef enum PaStreamCallbackResult:
         paContinue = 0
 
@@ -40,6 +38,8 @@ cdef extern from "portaudio.h":
     ctypedef unsigned long PaStreamCallbackFlags
 
     ctypedef int PaStreamCallback(const void*, void*, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void*)
+
+    cdef const PaSampleFormat paFloat32 = 0x00000001
 
     PaError Pa_Initialize()
     PaError Pa_Terminate()
