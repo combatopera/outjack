@@ -23,7 +23,6 @@ from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from cpython.exc cimport PyErr_CheckSignals
 from cpython.ref cimport PyObject
-cimport numpy as np
 import numpy as pynp, time
 
 cdef int callback(jack_nframes_t nframes, void* arg):
