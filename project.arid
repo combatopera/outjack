@@ -25,4 +25,6 @@ requires +=
     nativecommon>=4
     numpy>=1.16.6
 build requires += numpy
-devel packages += jack-audio-connection-kit-devel
+devel packages +=
+    jack-audio-connection-kit-devel
+    portaudio-devel
