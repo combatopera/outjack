@@ -30,7 +30,7 @@ cdef int callback(const void* input, void* output, unsigned long frameCount, con
     return paContinue
 
 cdef void* _get_buffer(uintptr_t port, ring_nframes_t nframes, void* callbackinfo):
-    return callbackinfo
+    return (<void**> callbackinfo)[port]
 
 cdef class Client:
 
@@ -47,14 +47,14 @@ cdef class Client:
         self.outbufs = [pynp.empty(chancount * buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(buffersize, ringsize, coupling)
         self.payload.get_buffer = &_get_buffer
-        self.payload.ports.append(0)
+        self.payload.ports.extend(range(chancount))
         self.writecursorproxy = self.payload.writecursor
         self.chancount = chancount
         self.outputrate = outputrate
         self.buffersize = buffersize
 
     def activate(self):
-        Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32, self.outputrate, self.buffersize, &callback, <PyObject*> self.payload)
+        Pa_OpenDefaultStream(&self.stream, 0, self.chancount, paFloat32 | paNonInterleaved, self.outputrate, self.buffersize, &callback, <PyObject*> self.payload)
         Pa_StartStream(self.stream)
 
     def current_output_buffer(self):

@@ -39,6 +39,8 @@ cdef extern from "portaudio.h":
 
     cdef const PaSampleFormat paFloat32 = 0x00000001
 
+    cdef const PaSampleFormat paNonInterleaved = 0x80000000
+
     PaError Pa_Initialize()
     PaError Pa_Terminate()
     PaError Pa_OpenDefaultStream(PaStream**, int, int, PaSampleFormat, double, unsigned long, PaStreamCallback*, void*)
