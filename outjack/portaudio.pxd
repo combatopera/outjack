@@ -25,9 +25,7 @@ cdef extern from "portaudio.h":
     ctypedef double PaTime
 
     ctypedef struct PaStreamCallbackTimeInfo:
-        PaTime inputBufferAdcTime
-        PaTime currentTime
-        PaTime outputBufferDacTime
+        pass
 
     ctypedef int PaError
 
