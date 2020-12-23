@@ -18,7 +18,7 @@
 # cython: language_level=3
 
 from .portaudio cimport *
-from .ring cimport Payload, ring_nframes_t
+from .ring cimport getaddress, Payload, ring_nframes_t
 from cpython.ref cimport PyObject
 from libc.stdint cimport uintptr_t
 cimport numpy as np
@@ -28,9 +28,6 @@ cdef int callback(const void* input, void* output, unsigned long frameCount, con
     cdef Payload payload = <Payload> userData
     payload.callback(frameCount, output)
     return paContinue
-
-cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
-    return &samples[0]
 
 cdef void* _get_buffer(uintptr_t port, ring_nframes_t nframes, void* callbackinfo):
     return callbackinfo
