@@ -39,6 +39,9 @@ ctypedef np.float32_t ring_sample_t
 
 ctypedef np.uint32_t ring_nframes_t
 
+cdef inline np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
+    return &samples[0]
+
 cdef class Payload:
 
     cdef object ports

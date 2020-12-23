@@ -18,7 +18,7 @@
 # cython: language_level=3
 
 from .jack cimport *
-from .ring cimport Payload
+from .ring cimport getaddress, Payload
 from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 from cpython.exc cimport PyErr_CheckSignals
@@ -30,9 +30,6 @@ cdef int callback(jack_nframes_t nframes, void* arg):
     cdef Payload payload = <Payload> arg
     payload.callback(nframes, NULL)
     return 0 # Success.
-
-cdef jack_default_audio_sample_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
-    return &samples[0]
 
 cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo):
     return jack_port_get_buffer(<jack_port_t*> port, nframes)
