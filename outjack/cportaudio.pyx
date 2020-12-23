@@ -47,7 +47,7 @@ cdef class Client:
         self.outbufs = [pynp.empty(chancount * buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(buffersize, ringsize, coupling)
         self.payload.get_buffer = &_get_buffer
-        self.payload.ports.append(None)
+        self.payload.ports.append(0)
         self.writecursorproxy = self.payload.writecursor
         self.chancount = chancount
         self.outputrate = outputrate
