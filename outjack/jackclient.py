@@ -17,9 +17,10 @@
 
 from . import cjack
 from lagoon import jack_control
+from lagoon.program import partial
 import sys
 
-jackctl = jack_control.partial(stdout = sys.stderr)
+jackctl = jack_control[partial](stdout = sys.stderr)
 
 class JackClient:
 
