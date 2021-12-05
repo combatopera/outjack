@@ -28,3 +28,4 @@ build requires += numpy
 devel packages +=
     jack-audio-connection-kit-devel
     portaudio-devel
+buildbot enabled = true
