@@ -15,17 +15,20 @@
 : You should have received a copy of the GNU General Public License
 : along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
-pyversions += 3
-years +=
-    2017
-    2020
 author = Andrzej Cichocki
-name = outjack
-requires +=
-    nativecommon>=4
-    numpy>=1.16.6
 build requires += numpy
+buildbot enabled = true
 devel packages +=
     jack-audio-connection-kit-devel
     portaudio-devel
-buildbot enabled = true
+github account = combatopera
+name = outjack
+pypi account = combatopera
+pyversions += 3
+requires +=
+    nativecommon>=4
+    numpy>=1.16.6
+tagline = JACK and PortAudio integration for Python
+years +=
+    2017
+    2020
