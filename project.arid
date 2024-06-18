@@ -18,9 +18,9 @@
 author = Andrzej Cichocki
 build requires += numpy
 buildbot enabled = true
-devel packages +=
-    jack-audio-connection-kit-devel
-    portaudio-devel
+devel
+    packages += portaudio-devel
+    scripts += $.[curl -L https://github.com/jackaudio/jack2/archive/v1.9.22.tar.gz | tar -xzv && cd jack2-1.9.22 && ./waf configure && ./waf && ./waf install]
 github account = combatopera
 name = outjack
 pypi account = combatopera
