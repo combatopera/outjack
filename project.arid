@@ -26,6 +26,7 @@ devel
 github account = combatopera
 name = outjack
 native = true
+pydoc_enabled = false
 pypi account = combatopera
 pyversions += 3
 requires +=
