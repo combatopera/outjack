@@ -15,5 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
-import initnative
-del initnative
+from diapyr.util import initnative
+
+initnative()

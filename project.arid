@@ -30,7 +30,8 @@ pydoc_enabled = false
 pypi account = combatopera
 pyversions += 3
 requires +=
-    nativecommon>=4
+    Cython>=0.29.21
+    diapyr
     numpy>=1.16.6
 tagline = JACK and PortAudio integration for Python
 years +=
