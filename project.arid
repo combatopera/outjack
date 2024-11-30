@@ -33,7 +33,7 @@ pyversions += 3
 requires +=
     Cython>=0.29.21
     diapyr>=31
-    numpy>=1.16.6
+    numpy>=2.1.3
 tagline = JACK and PortAudio integration for Python
 years +=
     2017
