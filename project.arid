@@ -16,6 +16,7 @@
 : along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 author = Andrzej Cichocki
+author_email = 3613868+combatopera@users.noreply.github.com
 build requires += numpy
 buildbot enabled = true
 devel
