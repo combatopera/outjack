@@ -37,9 +37,9 @@ cdef extern from "portaudio.h":
 
     ctypedef int PaStreamCallback(const void*, void*, unsigned long, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void*)
 
-    cdef const PaSampleFormat paFloat32 = 0x00000001
+    cdef PaSampleFormat paFloat32 = 0x00000001
 
-    cdef const PaSampleFormat paNonInterleaved = 0x80000000
+    cdef PaSampleFormat paNonInterleaved = 0x80000000
 
     PaError Pa_Initialize()
     PaError Pa_Terminate()

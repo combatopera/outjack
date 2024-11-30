@@ -24,7 +24,7 @@ from libc.stdint cimport uintptr_t
 cimport numpy as np
 import numpy as pynp
 
-cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData):
+cdef int callback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData) noexcept:
     cdef Payload payload = <Payload> userData
     payload.callback(frameCount, output)
     return paContinue

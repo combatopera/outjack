@@ -25,7 +25,7 @@ from libc.stdint cimport uintptr_t
 from libc.stdio cimport fprintf, stderr
 import numpy as pynp, time
 
-cdef int callback(jack_nframes_t nframes, void* arg):
+cdef int callback(jack_nframes_t nframes, void* arg) noexcept:
     cdef Payload payload = <Payload> arg
     payload.callback(nframes, NULL)
     return 0 # Success.
