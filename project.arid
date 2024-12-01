@@ -28,7 +28,6 @@ devel
         $.[curl https://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz | tar -xzv && cd portaudio && ./configure && make && make install]
 github account = combatopera
 name = outjack
-numpy_build_version = 2.0.2
 pydoc_enabled = false
 pypi account = combatopera
 pyversions += 3
