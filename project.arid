@@ -27,8 +27,8 @@ devel
         $.[curl -L https://github.com/jackaudio/jack2/archive/v1.9.22.tar.gz | tar -xzv && cd jack2-1.9.22 && ./waf configure && ./waf && ./waf install]
         $.[curl https://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz | tar -xzv && cd portaudio && ./configure && make && make install]
 github account = combatopera
+internal_module += outjack
 name = outjack
-pydoc_enabled = false
 pypi account = combatopera
 pyversions += 3
 requires += numpy>=$(numpy_build_version)

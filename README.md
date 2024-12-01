@@ -18,3 +18,14 @@ venvname/bin/pip install -U pip
 venvname/bin/pip install outjack
 . venvname/bin/activate
 ```
+
+## API
+
+<a id="outjack.jackclient"></a>
+
+### outjack.jackclient
+
+<a id="outjack.portaudioclient"></a>
+
+### outjack.portaudioclient
+
