@@ -17,7 +17,9 @@
 
 author = Andrzej Cichocki
 author_email = 3613868+combatopera@users.noreply.github.com
-build requires += numpy==$(numpy_version)
+build requires +=
+    Cython==3.0.11
+    numpy==$(numpy_version)
 buildbot enabled = true
 devel
     packages += python3
@@ -26,7 +28,6 @@ devel
         $.[curl https://files.portaudio.com/archives/pa_stable_v190700_20210406.tgz | tar -xzv && cd portaudio && ./configure && make && make install]
 github account = combatopera
 name = outjack
-native = true
 numpy_version = 2.1.3
 pydoc_enabled = false
 pypi account = combatopera
