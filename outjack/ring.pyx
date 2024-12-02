@@ -60,7 +60,7 @@ cdef class Payload:
         pthread_mutex_unlock(&(self.mutex))
         return self.writecursor
 
-    cdef void callback(self, ring_nframes_t nframes, void* callbackinfo) nogil:
+    cdef void callback(self, ring_nframes_t nframes, void* callbackinfo) noexcept nogil:
         # This is a Python-free zone!
         pthread_mutex_lock(&(self.mutex)) # Worst case is a tiny delay while we wait for send to finish.
         cdef ring_sample_t* samples = self.chunks[self.readcursor]

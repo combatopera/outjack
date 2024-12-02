@@ -58,4 +58,4 @@ cdef class Payload:
 
     cdef unsigned send(self, ring_sample_t* samples)
 
-    cdef void callback(self, ring_nframes_t nframes, void* callbackinfo) nogil
+    cdef void callback(self, ring_nframes_t nframes, void* callbackinfo) noexcept nogil
