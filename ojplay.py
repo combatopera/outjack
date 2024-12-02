@@ -17,18 +17,23 @@
 
 'Usage example.'
 __import__('pyrbo.jit')
+from outjack.jackclient import JackClient
 from outjack.portaudioclient import PortAudioClient
 import numpy as np
 
 amplitude = .5
-buffersize = 1024
 frequency = 440
-outputrate = 44100
+ringsize = 2
 
 def main():
-    client = PortAudioClient(1, outputrate, buffersize, 2, True)
+    if True:
+        client = PortAudioClient(1, 44100, 1024, ringsize, True)
+    else:
+        client = JackClient('ojplay', 1, ringsize, True)
     client.start()
     try:
+        buffersize = client.buffersize
+        outputrate = client.outputrate
         client.activate()
         try:
             k = 0
