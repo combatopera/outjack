@@ -29,7 +29,7 @@ cdef int callback(const void* input, void* output, unsigned long frameCount, con
     payload.callback(frameCount, output)
     return paContinue
 
-cdef void* _get_buffer(uintptr_t port, ring_nframes_t nframes, void* callbackinfo) nogil:
+cdef void* _get_buffer(uintptr_t port, ring_nframes_t nframes, void* callbackinfo) noexcept nogil:
     return (<void**> callbackinfo)[port]
 
 cdef class Client:

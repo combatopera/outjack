@@ -30,7 +30,7 @@ cdef int callback(jack_nframes_t nframes, void* arg) noexcept:
     payload.callback(nframes, NULL)
     return 0 # Success.
 
-cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo) nogil:
+cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo) noexcept nogil:
     return jack_port_get_buffer(<jack_port_t*> port, nframes)
 
 cdef class Client:
