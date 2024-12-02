@@ -26,35 +26,42 @@ log = logging.getLogger(__name__)
 amplitude = .5
 ringsize = 2
 
+class Client:
+
+    class jack(JackClient):
+
+        def __init__(self):
+            super().__init__('ojplay', 1, ringsize, True)
+
+        def start(self):
+            super().start()
+            self.port_register_output('tone')
+
+        def activate(self):
+            super().activate()
+            for sink in 'playback_1', 'playback_2': # TODO: Deduce these.
+                self.connect(0, f"system:{sink}")
+
+    class portaudio(PortAudioClient):
+
+        def __init__(self):
+            super().__init__(1, 44100, 1024, ringsize, True)
+
 def main(): # FIXME: Do not play garbage at first.
     logging.basicConfig(format = "%(levelname)s %(message)s", level = logging.DEBUG)
     parser = ArgumentParser()
-    parser.add_argument('--client', choices = ['jack', 'portaudio'], default = 'portaudio')
+    parser.add_argument('--client', choices = [name for name in dir(Client) if '_' != name[0]], default = Client.portaudio.__name__)
     parser.add_argument('--frequency', type = float, default = 440)
     args = parser.parse_args()
+    client = getattr(Client, args.client)()
     frequency = args.frequency
-    if 'portaudio' == args.client:
-        client = PortAudioClient(1, 44100, 1024, ringsize, True)
-        def onstart():
-            pass
-        def onactivate():
-            pass
-    else:
-        client = JackClient('ojplay', 1, ringsize, True)
-        def onstart():
-            client.port_register_output('tone')
-        def onactivate():
-            for sink in 'playback_1', 'playback_2':
-                client.connect(0, f"system:{sink}")
     client.start()
     try:
         buffersize = client.buffersize
         outputrate = client.outputrate
         log.debug(dict(buffersize = buffersize, outputrate = outputrate))
-        onstart()
         client.activate()
         try:
-            onactivate()
             k = 0
             buffer = client.current_output_buffer()
             while True:
