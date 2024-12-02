@@ -53,7 +53,7 @@ cdef class Payload:
     cdef size_t bufferbytes
     cdef size_t buffersize
     cdef bint coupling
-    cdef void* (*get_buffer)(uintptr_t, ring_nframes_t, void*)
+    cdef void* (*get_buffer)(uintptr_t, ring_nframes_t, void*) nogil
 
     cdef unsigned send(self, ring_sample_t* samples)
 
