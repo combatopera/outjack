@@ -24,14 +24,15 @@ import logging, numpy as np
 
 log = logging.getLogger(__name__)
 amplitude = .5
-frequency = 440
 ringsize = 2
 
 def main():
     logging.basicConfig(level = logging.DEBUG)
     parser = ArgumentParser()
+    parser.add_argument('--frequency', default = 440, type = float)
     parser.add_argument('client', choices = ['jack', 'portaudio'])
     args = parser.parse_args()
+    frequency = args.frequency
     if 'portaudio' == args.client:
         client = PortAudioClient(1, 44100, 1024, ringsize, True)
         def onstart():
@@ -44,7 +45,7 @@ def main():
             client.port_register_output('tone')
         def onactivate():
             for sink in 'playback_1', 'playback_2':
-                client.connect('ojplay:tone', f"system:{sink}")
+                client.connect(0, f"system:{sink}")
     client.start()
     try:
         buffersize = client.buffersize
