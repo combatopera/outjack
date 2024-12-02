@@ -30,7 +30,7 @@ cdef class Payload:
 
     def __init__(self, portcount, buffersize, ringsize, coupling):
         self.ports = <uintptr_t*> malloc(portcount * sizeof (uintptr_t))
-        for portindex in range(portcount):
+        for portindex in xrange(portcount):
             self.ports[portindex] = <uintptr_t> NULL
         pthread_mutex_init(&(self.mutex), NULL)
         pthread_cond_init(&(self.cond), NULL)

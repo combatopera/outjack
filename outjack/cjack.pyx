@@ -65,7 +65,7 @@ cdef class Client:
 
     def port_register_output(self, const char* port_name):
         # Last arg ignored for JACK_DEFAULT_AUDIO_TYPE:
-        for portindex in range(self.payload.portcount):
+        for portindex in xrange(self.payload.portcount):
             if (<void*> self.payload.ports[portindex]) == NULL:
                 self.payload.ports[portindex] = <uintptr_t> jack_port_register(self.client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0)
                 return
