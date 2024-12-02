@@ -19,6 +19,11 @@ venvname/bin/pip install outjack
 . venvname/bin/activate
 ```
 
+## Commands
+
+### ojplay
+Usage example.
+
 ## API
 
 <a id="outjack.jackclient"></a>
