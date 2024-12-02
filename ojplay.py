@@ -18,7 +18,7 @@
 'Usage example.'
 __import__('pyrbo.jit')
 from outjack.portaudioclient import PortAudioClient
-import math
+import numpy as np
 
 amplitude = .5
 buffersize = 1024
@@ -34,8 +34,7 @@ def main():
             k = 0
             buffer = client.current_output_buffer()
             while True:
-                for i in range(buffersize):
-                    buffer[i] = math.sin(2 * math.pi * frequency * (k + i) / outputrate) * amplitude
+                buffer[:] = np.sin(np.arange(k, k + buffersize) * (2 * np.pi * frequency / outputrate)) * amplitude
                 k += buffersize
                 buffer = client.send_and_get_output_buffer()
         finally:
