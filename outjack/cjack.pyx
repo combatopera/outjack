@@ -19,11 +19,9 @@
 
 from .jack cimport *
 from .ring cimport getaddress, Payload
-from cpython.exc cimport PyErr_CheckSignals
 from cpython.ref cimport PyObject
 from libc.stdint cimport uintptr_t
-from libc.stdio cimport fprintf, stderr
-import numpy as pynp, time
+import numpy as pynp
 
 cdef int callback(jack_nframes_t nframes, void* arg) noexcept:
     cdef Payload payload = <Payload> arg
@@ -42,13 +40,9 @@ cdef class Client:
     cdef unsigned writecursorproxy
 
     def __init__(self, const char* client_name, chancount, ringsize, coupling):
-        while True:
-            self.client = jack_client_open(client_name, JackNullOption, NULL)
-            if NULL != self.client:
-                break
-            fprintf(stderr, "%s\n", <char*> 'Failed to create a JACK client.')
-            time.sleep(1)
-            PyErr_CheckSignals()
+        self.client = jack_client_open(client_name, JackNullOption, NULL)
+        if NULL == self.client:
+            raise Exception('Failed to create a JACK client.')
         self.buffersize = jack_get_buffer_size(self.client)
         self.outbufs = [pynp.empty(chancount * self.buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
         self.payload = Payload(chancount, self.buffersize, ringsize, coupling)
