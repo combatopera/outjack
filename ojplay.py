@@ -26,7 +26,7 @@ tone = 440
 vol = .5
 
 def main():
-    client = PortAudioClient(1, freq, bufsize, 100, True)
+    client = PortAudioClient(1, freq, bufsize, 2, True)
     client.start()
     try:
         client.activate()
