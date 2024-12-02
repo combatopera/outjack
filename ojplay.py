@@ -17,25 +17,43 @@
 
 'Usage example.'
 __import__('pyrbo.jit')
+from argparse import ArgumentParser
 from outjack.jackclient import JackClient
 from outjack.portaudioclient import PortAudioClient
-import numpy as np
+import logging, numpy as np
 
+log = logging.getLogger(__name__)
 amplitude = .5
 frequency = 440
 ringsize = 2
 
 def main():
-    if True:
+    logging.basicConfig(level = logging.DEBUG)
+    parser = ArgumentParser()
+    parser.add_argument('client', choices = ['jack', 'portaudio'])
+    args = parser.parse_args()
+    if 'portaudio' == args.client:
         client = PortAudioClient(1, 44100, 1024, ringsize, True)
+        def onstart():
+            pass
+        def onactivate():
+            pass
     else:
         client = JackClient('ojplay', 1, ringsize, True)
+        def onstart():
+            client.port_register_output('tone')
+        def onactivate():
+            for sink in 'playback_1', 'playback_2':
+                client.connect('ojplay:tone', f"system:{sink}")
     client.start()
     try:
         buffersize = client.buffersize
         outputrate = client.outputrate
+        log.debug(dict(buffersize = buffersize, outputrate = outputrate))
+        onstart()
         client.activate()
         try:
+            onactivate()
             k = 0
             buffer = client.current_output_buffer()
             while True:
