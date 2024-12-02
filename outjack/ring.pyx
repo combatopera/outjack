@@ -28,7 +28,7 @@ cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
 
 cdef class Payload:
 
-    def __init__(self, buffersize, ringsize, coupling):
+    def __init__(self, portcount, buffersize, ringsize, coupling):
         self.ports = []
         pthread_mutex_init(&(self.mutex), NULL)
         pthread_cond_init(&(self.cond), NULL)
@@ -39,6 +39,7 @@ cdef class Payload:
         self.writecursor = 0
         self.readcursor = 0
         self.bufferbytes = buffersize * sizeof (ring_sample_t)
+        self.portcount = portcount
         self.buffersize = buffersize
         self.coupling = coupling
 
@@ -62,8 +63,8 @@ cdef class Payload:
         pthread_mutex_lock(&(self.mutex)) # Worst case is a tiny delay while we wait for send to finish.
         cdef ring_sample_t* samples = self.chunks[self.readcursor]
         if samples != NULL:
-            for port in self.ports:
-                memcpy(self.get_buffer(<uintptr_t> port, nframes, callbackinfo), samples, self.bufferbytes)
+            for portindex in xrange(self.portcount):
+                memcpy(self.get_buffer(<uintptr_t> self.ports[portindex], nframes, callbackinfo), samples, self.bufferbytes)
                 samples = &samples[self.buffersize]
             self.chunks[self.readcursor] = NULL
             self.readcursor = (self.readcursor + 1) % self.ringsize

@@ -51,6 +51,7 @@ cdef class Payload:
     cdef unsigned writecursor # Always points to a free chunk.
     cdef unsigned readcursor
     cdef size_t bufferbytes
+    cdef size_t portcount
     cdef size_t buffersize
     cdef bint coupling
     cdef void* (*get_buffer)(uintptr_t, ring_nframes_t, void*) nogil

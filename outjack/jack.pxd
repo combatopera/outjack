@@ -53,4 +53,4 @@ cdef extern from "jack/jack.h":
     int jack_deactivate(jack_client_t*)
     int jack_client_close(jack_client_t*)
     int jack_set_process_callback(jack_client_t*, JackProcessCallback, void*)
-    void* jack_port_get_buffer(jack_port_t*, jack_nframes_t)
+    void* jack_port_get_buffer(jack_port_t*, jack_nframes_t) nogil

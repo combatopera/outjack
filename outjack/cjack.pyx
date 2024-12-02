@@ -30,7 +30,7 @@ cdef int callback(jack_nframes_t nframes, void* arg) noexcept:
     payload.callback(nframes, NULL)
     return 0 # Success.
 
-cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo):
+cdef void* _get_buffer(uintptr_t port, jack_nframes_t nframes, void* callbackinfo) nogil:
     return jack_port_get_buffer(<jack_port_t*> port, nframes)
 
 cdef class Client:
@@ -51,7 +51,7 @@ cdef class Client:
             PyErr_CheckSignals()
         self.buffersize = jack_get_buffer_size(self.client)
         self.outbufs = [pynp.empty(chancount * self.buffersize, dtype = pynp.float32) for _ in xrange(ringsize)]
-        self.payload = Payload(self.buffersize, ringsize, coupling)
+        self.payload = Payload(chancount, self.buffersize, ringsize, coupling)
         self.payload.get_buffer = &_get_buffer
         self.writecursorproxy = self.payload.writecursor
         # Note the pointer stays valid until Client is garbage-collected:
