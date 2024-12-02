@@ -20,13 +20,13 @@ __import__('pyrbo.jit')
 from outjack.portaudioclient import PortAudioClient
 import math
 
-bufsize = 1024
-freq = 44100
-tone = 440
-vol = .5
+amplitude = .5
+buffersize = 1024
+frequency = 440
+outputrate = 44100
 
 def main():
-    client = PortAudioClient(1, freq, bufsize, 2, True)
+    client = PortAudioClient(1, outputrate, buffersize, 2, True)
     client.start()
     try:
         client.activate()
@@ -34,9 +34,9 @@ def main():
             k = 0
             buffer = client.current_output_buffer()
             while True:
-                for i in range(bufsize):
-                    buffer[i] = math.sin(2 * math.pi * tone * (k + i) / freq) * vol
-                k += bufsize
+                for i in range(buffersize):
+                    buffer[i] = math.sin(2 * math.pi * frequency * (k + i) / outputrate) * amplitude
+                k += buffersize
                 buffer = client.send_and_get_output_buffer()
         finally:
             client.deactivate()
