@@ -47,6 +47,7 @@ cdef extern from "jack/jack.h":
     jack_client_t* jack_client_open(const char*, jack_options_t, jack_status_t*, ...)
     jack_nframes_t jack_get_sample_rate(jack_client_t*)
     jack_port_t* jack_port_register(jack_client_t*, const char*, const char*, unsigned long, unsigned long)
+    const char* jack_port_name(const jack_port_t*)
     jack_nframes_t jack_get_buffer_size(jack_client_t*)
     int jack_activate(jack_client_t*)
     int jack_connect(jack_client_t*, const char*, const char*)
