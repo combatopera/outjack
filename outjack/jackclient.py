@@ -16,11 +16,6 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import cjack
-from lagoon import jack_control
-from lagoon.program import partial
-import sys
-
-jackctl = jack_control[partial](stdout = sys.stderr)
 
 class JackClient:
 
@@ -31,9 +26,6 @@ class JackClient:
         self.coupling = coupling
 
     def start(self):
-        self.startjack = jackctl.status(check = False)
-        if self.startjack:
-            jackctl.start()
         # XXX: Use an explicit character encoding?
         self.jack = cjack.Client(self.clientname.encode(), self.chancount, self.ringsize, self.coupling)
         # Your app should tune itself to satisfy these values:
@@ -60,5 +52,3 @@ class JackClient:
 
     def stop(self):
         self.jack.dispose()
-        if self.startjack:
-            jackctl.stop()

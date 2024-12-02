@@ -43,7 +43,7 @@ cdef class Client:
 
     def __init__(self, const char* client_name, chancount, ringsize, coupling):
         while True:
-            self.client = jack_client_open(client_name, JackNoStartServer, NULL)
+            self.client = jack_client_open(client_name, JackNullOption, NULL)
             if NULL != self.client:
                 break
             fprintf(stderr, "%s\n", <char*> 'Failed to create a JACK client.')

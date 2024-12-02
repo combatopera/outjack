@@ -25,7 +25,7 @@ cdef extern from "jack/jack.h":
         pass # Opaque.
 
     ctypedef enum jack_options_t:
-        JackNoStartServer = 0x01
+        JackNullOption = 0x00
 
     ctypedef enum jack_status_t:
         pass
