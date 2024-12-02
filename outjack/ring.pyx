@@ -29,7 +29,9 @@ cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples):
 cdef class Payload:
 
     def __init__(self, portcount, buffersize, ringsize, coupling):
-        self.ports = []
+        self.ports = <uintptr_t*> malloc(portcount * sizeof (uintptr_t))
+        for portindex in range(portcount):
+            self.ports[portindex] = <uintptr_t> NULL
         pthread_mutex_init(&(self.mutex), NULL)
         pthread_cond_init(&(self.cond), NULL)
         self.ringsize = ringsize
@@ -64,7 +66,7 @@ cdef class Payload:
         cdef ring_sample_t* samples = self.chunks[self.readcursor]
         if samples != NULL:
             for portindex in xrange(self.portcount):
-                memcpy(self.get_buffer(<uintptr_t> self.ports[portindex], nframes, callbackinfo), samples, self.bufferbytes)
+                memcpy(self.get_buffer(self.ports[portindex], nframes, callbackinfo), samples, self.bufferbytes)
                 samples = &samples[self.buffersize]
             self.chunks[self.readcursor] = NULL
             self.readcursor = (self.readcursor + 1) % self.ringsize

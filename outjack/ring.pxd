@@ -43,7 +43,7 @@ cdef np.float32_t* getaddress(np.ndarray[np.float32_t, ndim=1] samples)
 
 cdef class Payload:
 
-    cdef object ports
+    cdef uintptr_t* ports
     cdef pthread_mutex_t mutex
     cdef pthread_cond_t cond
     cdef unsigned ringsize
