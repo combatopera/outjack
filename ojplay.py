@@ -26,11 +26,11 @@ log = logging.getLogger(__name__)
 amplitude = .5
 ringsize = 2
 
-def main():
-    logging.basicConfig(level = logging.DEBUG)
+def main(): # FIXME: Do not play garbage at first.
+    logging.basicConfig(format = "%(levelname)s %(message)s", level = logging.DEBUG)
     parser = ArgumentParser()
-    parser.add_argument('--frequency', default = 440, type = float)
-    parser.add_argument('client', choices = ['jack', 'portaudio'])
+    parser.add_argument('--client', choices = ['jack', 'portaudio'], default = 'portaudio')
+    parser.add_argument('--frequency', type = float, default = 440)
     args = parser.parse_args()
     frequency = args.frequency
     if 'portaudio' == args.client:
