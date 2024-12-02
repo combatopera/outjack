@@ -38,8 +38,13 @@ class JackClient:
     def activate(self):
         self.jack.activate()
 
-    def connect(self, source_port_name, destination_port_name):
-        self.jack.connect(source_port_name.encode(), destination_port_name.encode())
+    def connect(self, source_name_or_index, destination_port_name):
+        try:
+            encode = source_name_or_index.encode
+        except AttributeError:
+            self.jack.connect_index(source_name_or_index, destination_port_name.encode())
+        else:
+            self.jack.connect_name(encode(), destination_port_name.encode())
 
     def current_output_buffer(self):
         return self.jack.current_output_buffer()

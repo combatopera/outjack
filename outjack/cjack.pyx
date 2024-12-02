@@ -68,8 +68,11 @@ cdef class Client:
     def activate(self):
         return jack_activate(self.client)
 
-    def connect(self, const char* source_port_name, const char* destination_port_name):
+    def connect_name(self, const char* source_port_name, const char* destination_port_name):
         return jack_connect(self.client, source_port_name, destination_port_name)
+
+    def connect_index(self, source_port_index, const char* destination_port_name):
+        return jack_connect(self.client, jack_port_name(<jack_port_t*> self.payload.ports[source_port_index]), destination_port_name)
 
     def current_output_buffer(self):
         return self.outbufs[self.writecursorproxy]
