@@ -31,7 +31,10 @@ internal_module += outjack
 name = outjack
 pypi account = combatopera
 pyversions += 3
-requires += numpy>=$(numpy_build_version)
+requires +=
+    Cython>=$(cython_build_version)
+    numpy>=$(numpy_build_version)
+    pyrbo>=5
 tagline = JACK and PortAudio integration for Python
 years +=
     2017
