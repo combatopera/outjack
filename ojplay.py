@@ -16,7 +16,7 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 'Usage example.'
-from .portaudioclient import PortAudioClient
+from outjack.portaudioclient import PortAudioClient
 import math
 
 bufsize = 1024
