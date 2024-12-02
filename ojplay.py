@@ -16,11 +16,10 @@
 # along with outjack.  If not, see <http://www.gnu.org/licenses/>.
 
 'Usage example.'
-from pyrbo import jit
+__import__('pyrbo.jit')
 from outjack.portaudioclient import PortAudioClient
 import math
 
-del jit
 bufsize = 1024
 freq = 44100
 tone = 440
