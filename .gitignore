@@ -1,4 +1,3 @@
-#gclean
 *.pyc
 /outjack/*.pyxbldc
 /outjack/*.c
@@ -8,6 +7,5 @@
 outjack.egg-info/*
 !outjack.egg-info/PKG-INFO
 !outjack.egg-info/requires.txt
-/setup.cfg
 /setup.py
 /pyproject.toml
