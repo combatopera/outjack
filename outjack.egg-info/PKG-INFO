@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: outjack
-Version: 20.dev0
+Version: 21.dev0
 Summary: JACK and PortAudio integration for Python
 Home-page: https://github.com/combatopera/outjack
 Author: Andrzej Cichocki
