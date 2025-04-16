@@ -12,7 +12,7 @@ Requires-Dist: numpy>=2.0.2
 Requires-Dist: pyrbo>=5
 
 # outjack
-JACK and PortAudio integration for Python
+JACK and PortAudio integration for Python.
 
 ## Install
 These are generic installation instructions.

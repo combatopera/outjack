@@ -1,5 +1,5 @@
 # outjack
-JACK and PortAudio integration for Python
+JACK and PortAudio integration for Python.
 
 ## Install
 These are generic installation instructions.
