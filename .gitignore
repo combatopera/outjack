@@ -6,6 +6,5 @@
 /dist/
 outjack.egg-info/*
 !outjack.egg-info/PKG-INFO
-!outjack.egg-info/requires.txt
 /setup.py
 /pyproject.toml
