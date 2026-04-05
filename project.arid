@@ -19,7 +19,7 @@ author = Andrzej Cichocki
 author_email = 3613868+combatopera@users.noreply.github.com
 build requires +=
     Cython==$(cython_build_version)
-    numpy==$(numpy_build_version)
+    $*$(numpy build_requires)
 buildbot enabled = true
 devel
     packages += python3
@@ -32,7 +32,7 @@ name = outjack
 pypi account = combatopera
 requires +=
     Cython>=$(cython_build_version)
-    numpy>=$(numpy_build_version)
+    $(numpy lower_bound)
     pyrbo>=5
 tagline = JACK and PortAudio integration for Python
 years +=
